@@ -3,13 +3,12 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2023-05-18 Do 22:01 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Blog Posts</title>
+<title>&lrm;</title>
 <meta name="generator" content="Org Mode" />
 <link href='http://fonts.googleapis.com/css?family=Libre+Baskerville:400,400italic' rel='stylesheet' type='text/css'>
-<link rel='stylesheet' href='../css/style.css' type='text/css'/>
+<link rel='stylesheet' href='css/style.css' type='text/css'/>
 </head>
 <body>
 <div id="preamble" class="status">
@@ -23,15 +22,19 @@
 </div>
 </div>
 <div id="content" class="content">
-<h1 class="title">Blog Posts</h1>
+<div id="outline-container-orga285f71" class="outline-2">
+<h2 id="orga285f71">Contact me</h2>
+<div class="outline-text-2" id="text-orga285f71">
 <ul class="org-ul">
-<li><span class="timestamp">[2023-05-18]</span> <a href="org-publish.html">Building a Blog with Emacs Org-Mode</a></li>
-<li><span class="timestamp">[2023-05-18]</span> <a href="why-knowledge-should-be-shared.html">The Power of Knowledge Sharing: Why We Should Embrace It</a></li>
+<li>LinkedIn: <a href="https://www.linkedin.com/in/mikail-yildiz-9771a0104">Mikail Yildiz</a></li>
+<li>GitHub: <a href="https://github.com/mikaayil/">mikaayil</a></li>
 </ul>
+</div>
+</div>
 </div>
 <div id="postamble" class="status">
 <div class='footer'>
-Last updated 2023-05-18 Do 22:01. <br>
+Last updated 2023-05-18 Do 14:03. <br>
 Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 28.2 (<a href="https://orgmode.org">Org</a> mode 9.5.5) on <a href="https://www.gnu.org">GNU</a>/<a href="https://www.kernel.org/">Linux</a>
 </div>
 </div>

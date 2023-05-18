@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2023-05-18 Do 21:58 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Building a Blog with Emacs Org-Mode</title>
+<meta name="generator" content="Org Mode" />
+<link href='http://fonts.googleapis.com/css?family=Libre+Baskerville:400,400italic' rel='stylesheet' type='text/css'>
+<link rel='stylesheet' href='../css/style.css' type='text/css'/>
+</head>
+<body>
+<div id="preamble" class="status">
+<div class='nav'>
+<ul>
+<li><a href='/'>Home</a></li>
+<li><a href='/blog/index.html'>Blog</a></li>
+<li><a href='http://github.com/mikaayil'>GitHub</a></li>
+<li><a href='/contact.html'>Contact</a></li>
+</ul>
+</div>
+</div>
+<div id="content" class="content">
+<h1 class="title">Building a Blog with Emacs Org-Mode</h1>
+
+
+<div id="outline-container-orgf515cec" class="outline-2">
+<h2 id="orgf515cec">Building a Blog with Emacs Org-Mode</h2>
+<div class="outline-text-2" id="text-orgf515cec">
+<p>
+Org-Mode is an exemplary tool for authoring content. My objective is to incorporate a blog within Emacs, allowing me to
+broadcast interesting subjects.
+</p>
+
+<p>
+While there exist solutions like Jekyll or Hugo, my preference leans towards Emacs integration. This is mainly because I
+frequently find myself immersed in Emacs.
+</p>
+</div>
+
+<div id="outline-container-orgc6f7e4e" class="outline-3">
+<h3 id="orgc6f7e4e">Goal of this Article</h3>
+<div class="outline-text-3" id="text-orgc6f7e4e">
+<ol class="org-ol">
+<li>Guide the creation of a rudimentary blog with Org Publish</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-org3c49519" class="outline-3">
+<h3 id="org3c49519">Lets Go</h3>
+<div class="outline-text-3" id="text-org3c49519">
+</div>
+<div id="outline-container-org67c3f3a" class="outline-4">
+<h4 id="org67c3f3a">Directory Structure</h4>
+<div class="outline-text-4" id="text-org67c3f3a">
+<p>
+The directory structure is recommended as follows:
+</p>
+
+<pre class="example">
+.
+├── build-site.el
+├── content
+│   ├── blog
+│   ├── contact.org
+│   ├── css
+│   ├── img
+│   ├── index.org
+└── public
+    ├── blog
+    ├── contact.html
+    ├── css
+    ├── img
+    ├── index.html
+    ├── sitemap.html
+</pre>
+
+<ol class="org-ol">
+<li>The build-site.el will house the script to generate static HTML files and deposit them in the public folder.</li>
+<li>The content folder will be the repository for your content, with the 'blog' subdirectory dedicated to blog articles.
+<ol class="org-ol">
+<li>contact.org and index.org are pages slated for display in the navbar at the top.</li>
+<li>The css subdirectory will host styling details.</li>
+<li>The img folder will accommodate images that can be referenced.</li>
+</ol></li>
+</ol>
+
+<p>
+This article is an ongoing project and will be updated as and when new features are implemented. The tasks I plan to
+undertake can be found here: <a href="#todos">Next Steps and Future Ideas</a>
+</p>
+</div>
+</div>
+
+<div id="outline-container-orga7e8c14" class="outline-4">
+<h4 id="orga7e8c14">Building the build-site.el</h4>
+<div class="outline-text-4" id="text-orga7e8c14">
+<p>
+I'm going to walk you through the build-site.el piece by piece. This way, you'll understand all the parts. At the end,
+I'll share the full code in the right order.
+</p>
+</div>
+
+<ul class="org-ul">
+<li><a id="org9776312"></a>Setting up the Publishing Project<br />
+<div class="outline-text-5" id="text-org9776312">
+<p>
+First up, we need to decide how our project will look.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">Define the publishing project</span>
+(<span style="font-weight: bold;">setq</span> org-publish-project-alist
+      `((<span style="font-style: italic;">"org"</span>
+         <span style="font-weight: bold;">:base-directory</span> <span style="font-style: italic;">"./content"</span>
+         <span style="font-weight: bold;">:publishing-function</span> org-html-publish-to-html
+         <span style="font-weight: bold;">:publishing-directory</span> <span style="font-style: italic;">"./public"</span>
+         <span style="font-weight: bold;">:with-author</span> nil           <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">Don't include author name</span>
+         <span style="font-weight: bold;">:with-creator</span> t            <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">Include Emacs and Org versions in footer</span>
+         <span style="font-weight: bold;">:with-toc</span> nil                <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">Include a table of contents</span>
+         <span style="font-weight: bold;">:section-numbers</span> nil       <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">Don't include section numbers</span>
+         <span style="font-weight: bold;">:time-stamp-file</span> nil) <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">Don't include time stamp in file</span>
+
+        (<span style="font-style: italic;">"blog"</span>
+         <span style="font-weight: bold;">:base-directory</span> <span style="font-style: italic;">"./content/blog"</span>
+         <span style="font-weight: bold;">:base-extension</span> <span style="font-style: italic;">"org"</span>
+         <span style="font-weight: bold;">:publishing-directory</span> <span style="font-style: italic;">"./public/blog"</span>
+         <span style="font-weight: bold;">:publishing-function</span> org-html-publish-to-html
+         <span style="font-weight: bold;">:section-numbers</span> nil
+         <span style="font-weight: bold;">:with-toc</span> nil)
+
+
+        (<span style="font-style: italic;">"css"</span>
+         <span style="font-weight: bold;">:base-directory</span> <span style="font-style: italic;">"./content/css"</span>
+         <span style="font-weight: bold;">:base-extension</span> <span style="font-style: italic;">"css"</span>
+         <span style="font-weight: bold;">:publishing-directory</span> <span style="font-style: italic;">"./public/css"</span>
+         <span style="font-weight: bold;">:publishing-function</span> org-publish-attachment)
+
+        (<span style="font-style: italic;">"static"</span>
+         <span style="font-weight: bold;">:base-directory</span> <span style="font-style: italic;">"./content"</span>
+         <span style="font-weight: bold;">:base-extension</span> <span style="font-style: italic;">"txt</span><span style="font-weight: bold; font-style: italic;">\\</span><span style="font-weight: bold; font-style: italic;">|</span><span style="font-style: italic;">jpg</span><span style="font-weight: bold; font-style: italic;">\\</span><span style="font-weight: bold; font-style: italic;">|</span><span style="font-style: italic;">gif</span><span style="font-weight: bold; font-style: italic;">\\</span><span style="font-weight: bold; font-style: italic;">|</span><span style="font-style: italic;">png"</span>
+         <span style="font-weight: bold;">:recursive</span> t
+         <span style="font-weight: bold;">:publishing-directory</span>  <span style="font-style: italic;">"./public"</span>
+         <span style="font-weight: bold;">:publishing-function</span> org-publish-attachment)
+
+        (<span style="font-style: italic;">"website"</span> <span style="font-weight: bold;">:components</span> (<span style="font-style: italic;">"org"</span> <span style="font-style: italic;">"blog"</span> <span style="font-style: italic;">"static"</span> <span style="font-style: italic;">"css"</span>))))
+</pre>
+</div>
+</div>
+
+<ul class="org-ul">
+<li><a id="orga71e15f"></a>The <code>org-publish-project-alist</code> Variable<br />
+<div class="outline-text-6" id="text-orga71e15f">
+<p>
+The <code>org-publish-project-alist</code> is an important variable in Emacs org-mode that helps in defining the configuration for
+exporting org files to other formats. The value of this variable is a list of publishing projects, each represented by
+an association list, essentially a set of key-value pairs.
+</p>
+
+<p>
+Each project definition within org-publish-project-alist starts with a name (like "org", "blog", "css", "static",
+"website" in the given code), and then has a series of property-value pairs that describe how to handle files in that
+project.
+</p>
+</div>
+</li>
+
+<li><a id="org2a7cb12"></a>The meaning of the components<br />
+<div class="outline-text-6" id="text-org2a7cb12">
+<p>
+Let's go through the components defined in the code:
+</p>
+
+<ol class="org-ol">
+<li>"org": This component handles the root level org files in the content directory. It doesn't include an author name or table of contents, and it doesn't use section numbers or timestamp the file.</li>
+<li>"blog": This component is specifically for the org files inside the blog subdirectory of the content directory. It follows a similar configuration to the "org" component.</li>
+<li>"css": This component manages the CSS files in the content directory. It uses the org-publish-attachment function to handle these, meaning it just copies the CSS files to the output directory without making changes.</li>
+<li>"static": This component deals with text, jpg, gif, and png files in the content directory, copying them to the output directory recursively.</li>
+<li>"website": This is a meta-component, which is composed of the "org", "blog", "static", and "css" components. When you publish this component, it will publish all the components it comprises.</li>
+</ol>
+</div>
+</li>
+</ul>
+</li>
+
+<li><a id="org0bf06bc"></a>Setting Up Necessary Packages<br />
+<div class="outline-text-5" id="text-org0bf06bc">
+<p>
+To run the <code>build-set.el</code> script in our shell with the command <code>emacs -Q --script build-site.el</code>, we need to list the
+packages required to build our static webpage. Here's how we do it:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">Set the package installation directory so that packages aren't stored in the</span>
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">~/.emacs.d/elpa path.</span>
+(<span style="font-weight: bold;">require</span> '<span style="font-weight: bold; text-decoration: underline;">package</span>)
+(<span style="font-weight: bold;">setq</span> package-user-dir (expand-file-name <span style="font-style: italic;">"./.packages"</span>))
+(<span style="font-weight: bold;">setq</span> package-archives '((<span style="font-style: italic;">"melpa"</span> . <span style="font-style: italic;">"https://melpa.org/packages/"</span>)
+                         (<span style="font-style: italic;">"elpa"</span> . <span style="font-style: italic;">"https://elpa.gnu.org/packages/"</span>)))
+
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">Initialize the package system</span>
+(package-initialize)
+(<span style="font-weight: bold;">unless</span> package-archive-contents
+  (package-refresh-contents))
+
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">Install dependencies</span>
+(package-install 'htmlize)
+
+(<span style="font-weight: bold;">require</span> '<span style="font-weight: bold; text-decoration: underline;">ox-publish</span>)
+</pre>
+</div>
+
+<ol class="org-ol">
+<li>First, we say that the package is required.
+<ol class="org-ol">
+<li>Any installed packages will be saved in a hidden folder named .packages. This is in the same directory where build-site.el is run.</li>
+</ol></li>
+<li>The htmlize package is essential for creating nice-looking code snippets.</li>
+<li>We use ox-publish to turn our org notes into static HTML files.</li>
+</ol>
+</div>
+</li>
+
+<li><a id="org79c6ea6"></a>The Complete Code Snippet<br />
+<div class="outline-text-5" id="text-org79c6ea6">
+<p>
+Here's the complete code, with all the pieces we've discussed so far. This is everything you need to set up the package
+installation directory, initialize the package system, install dependencies, define the publishing project, and generate
+the site output. When everything's done, you'll get a message saying "Build complete."
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">Set the package installation directory so that packages aren't stored in the</span>
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">~/.emacs.d/elpa path.</span>
+(<span style="font-weight: bold;">require</span> '<span style="font-weight: bold; text-decoration: underline;">package</span>)
+(<span style="font-weight: bold;">setq</span> package-user-dir (expand-file-name <span style="font-style: italic;">"./.packages"</span>))
+(<span style="font-weight: bold;">setq</span> package-archives '((<span style="font-style: italic;">"melpa"</span> . <span style="font-style: italic;">"https://melpa.org/packages/"</span>)
+                         (<span style="font-style: italic;">"elpa"</span> . <span style="font-style: italic;">"https://elpa.gnu.org/packages/"</span>)))
+
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">Initialize the package system</span>
+(package-initialize)
+(<span style="font-weight: bold;">unless</span> package-archive-contents
+  (package-refresh-contents))
+
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">Install dependencies</span>
+(package-install 'htmlize)
+
+(<span style="font-weight: bold;">require</span> '<span style="font-weight: bold; text-decoration: underline;">ox-publish</span>)
+
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">Define the publishing project</span>
+(<span style="font-weight: bold;">setq</span> org-publish-project-alist
+      `((<span style="font-style: italic;">"org"</span>
+         <span style="font-weight: bold;">:base-directory</span> <span style="font-style: italic;">"./content"</span>
+         <span style="font-weight: bold;">:publishing-function</span> org-html-publish-to-html
+         <span style="font-weight: bold;">:publishing-directory</span> <span style="font-style: italic;">"./public"</span>
+         <span style="font-weight: bold;">:with-author</span> nil           <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">Don't include author name</span>
+         <span style="font-weight: bold;">:with-creator</span> t            <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">Include Emacs and Org versions in footer</span>
+         <span style="font-weight: bold;">:with-toc</span> nil                <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">Include a table of contents</span>
+         <span style="font-weight: bold;">:section-numbers</span> nil       <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">Don't include section numbers</span>
+         <span style="font-weight: bold;">:time-stamp-file</span> nil) <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">Don't include time stamp in file</span>
+
+        (<span style="font-style: italic;">"blog"</span>
+         <span style="font-weight: bold;">:base-directory</span> <span style="font-style: italic;">"./content/blog"</span>
+         <span style="font-weight: bold;">:base-extension</span> <span style="font-style: italic;">"org"</span>
+         <span style="font-weight: bold;">:publishing-directory</span> <span style="font-style: italic;">"./public/blog"</span>
+         <span style="font-weight: bold;">:publishing-function</span> org-html-publish-to-html
+         <span style="font-weight: bold;">:section-numbers</span> nil
+         <span style="font-weight: bold;">:with-toc</span> nil)
+
+
+        (<span style="font-style: italic;">"css"</span>
+         <span style="font-weight: bold;">:base-directory</span> <span style="font-style: italic;">"./content/css"</span>
+         <span style="font-weight: bold;">:base-extension</span> <span style="font-style: italic;">"css"</span>
+         <span style="font-weight: bold;">:publishing-directory</span> <span style="font-style: italic;">"./public/css"</span>
+         <span style="font-weight: bold;">:publishing-function</span> org-publish-attachment)
+
+        (<span style="font-style: italic;">"static"</span>
+         <span style="font-weight: bold;">:base-directory</span> <span style="font-style: italic;">"./content"</span>
+         <span style="font-weight: bold;">:base-extension</span> <span style="font-style: italic;">"txt</span><span style="font-weight: bold; font-style: italic;">\\</span><span style="font-weight: bold; font-style: italic;">|</span><span style="font-style: italic;">jpg</span><span style="font-weight: bold; font-style: italic;">\\</span><span style="font-weight: bold; font-style: italic;">|</span><span style="font-style: italic;">gif</span><span style="font-weight: bold; font-style: italic;">\\</span><span style="font-weight: bold; font-style: italic;">|</span><span style="font-style: italic;">png"</span>
+         <span style="font-weight: bold;">:recursive</span> t
+         <span style="font-weight: bold;">:publishing-directory</span>  <span style="font-style: italic;">"./public"</span>
+         <span style="font-weight: bold;">:publishing-function</span> org-publish-attachment)
+
+        (<span style="font-style: italic;">"website"</span> <span style="font-weight: bold;">:components</span> (<span style="font-style: italic;">"org"</span> <span style="font-style: italic;">"blog"</span> <span style="font-style: italic;">"static"</span> <span style="font-style: italic;">"css"</span>))))
+
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">Generate the site output</span>
+(org-publish-all t)
+
+(message <span style="font-style: italic;">"Build complete"</span>)
+</pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+
+<div id="outline-container-orgb778b8e" class="outline-4">
+<h4 id="orgb778b8e">Writing Blog Articles</h4>
+<div class="outline-text-4" id="text-orgb778b8e">
+<p>
+Now, it's time for you to start writing! Create your org files in the correct content folders. When you're ready, run
+the <code>build-site.el</code> script. This will turn your files into static HTML content that you can put up anywhere you want.
+</p>
+
+<blockquote>
+<p>
+Just a heads-up: don't only rely on the code. There might be bugs or missing parts. Use it more as an inspiration to
+dive deeper into the world of Emacs. But it should still give you a good idea of how things work.
+</p>
+</blockquote>
+</div>
+</div>
+</div>
+
+<div id="outline-container-todos" class="outline-3">
+<h3 id="todos">Next Steps and Future Ideas</h3>
+<div class="outline-text-3" id="text-todos">
+<p>
+Here are some improvements I'm planning to make, or topics I'd like to write about in the future:
+</p>
+</div>
+
+<div id="outline-container-org05a41d1" class="outline-4">
+<h4 id="org05a41d1"><span class="todo TODO">TODO</span> Add a Side Table of Contents</h4>
+<div class="outline-text-4" id="text-org05a41d1">
+<p>
+For better navigation, especially in lengthy articles, I'd love to incorporate a table of contents on the left side of the screen. This should help readers find their way around more easily.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org172bd51" class="outline-4">
+<h4 id="org172bd51"><span class="todo TODO">TODO</span> Implement a Search Bar</h4>
+<div class="outline-text-4" id="text-org172bd51">
+<p>
+In order to help visitors find specific information, adding a search bar to the website would be beneficial. This feature would allow users to search for particular words across the entire site.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org70e3da5" class="outline-4">
+<h4 id="org70e3da5"><span class="todo TODO">TODO</span> Enable Draft Tagging for Articles</h4>
+<div class="outline-text-4" id="text-org70e3da5">
+<p>
+For those articles that are still works in progress, it would be good to exclude them from being published by using a draft tag. This way, unfinished articles won't be displayed prematurely.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org9140515" class="outline-4">
+<h4 id="org9140515"><span class="todo TODO">TODO</span> Further Exploration of CSS Design</h4>
+<div class="outline-text-4" id="text-org9140515">
+<p>
+I'd like to delve deeper into the subject of CSS design. In the meantime, you can refer to the informative blogs that guided me for insights into styling. Check out the section <a href="#Blogs that helped me">Blogs That Helped Me</a> for more information.
+</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-Blogs that helped me" class="outline-3">
+<h3 id="Blogs that helped me">Blogs That Helped Me</h3>
+<div class="outline-text-3" id="text-Blogs that helped me">
+<p>
+I want to say a big thank you to these articles that helped me a lot. These great reads might also help you if something
+isn't clear in my article. They were my go-to guides.
+</p>
+
+<ul class="org-ul">
+<li><a href="https://systemcrafters.net/publishing-websites-with-org-mode/building-the-site/">Publishing Websites with Org-Mode by SystemCrafters</a></li>
+<li><a href="https://taingram.org/blog/org-mode-blog.html">Org-Mode Blog by Taingram</a></li>
+<li><a href="https://nicolas.petton.fr/blog/blogging-with-org-mode.html">Blogging with Org Mode by Nicolas Petton</a></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<div class='footer'>
+Last updated 2023-05-18 Do 21:58. <br>
+Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 28.2 (<a href="https://orgmode.org">Org</a> mode 9.5.5) on <a href="https://www.gnu.org">GNU</a>/<a href="https://www.kernel.org/">Linux</a>
+</div>
+</div>
+</body>
+</html>
