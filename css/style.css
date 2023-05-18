@@ -259,3 +259,7 @@ body .clearfix {
 .gallery .figure img.landscape {
   max-width: 690px;
 }
+
+#table-of-contents li {
+  line-height: 1;  /* Standard ist etwa 1.2 */
+}

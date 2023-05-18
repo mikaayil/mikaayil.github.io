@@ -24,9 +24,9 @@
 <div id="content" class="content">
 <h1 class="title">Hallo</h1>
 
-<div id="outline-container-org2678d34" class="outline-2">
-<h2 id="org2678d34">About Me</h2>
-<div class="outline-text-2" id="text-org2678d34">
+<div id="outline-container-org4f8b80f" class="outline-2">
+<h2 id="org4f8b80f">About Me</h2>
+<div class="outline-text-2" id="text-org4f8b80f">
 <p>
 This is a space where I document and share my explorations in technology. You'll find discussions on a range of topics
 such as my Emacs setup, Linux, and particularly Arch Linux, as well as Kubernetes, among others. I invite you to join me
@@ -35,9 +35,9 @@ on this journey through the tech landscape.
 </div>
 </div>
 
-<div id="outline-container-org8ae5906" class="outline-2">
-<h2 id="org8ae5906">My Blog Articles</h2>
-<div class="outline-text-2" id="text-org8ae5906">
+<div id="outline-container-org74d43f3" class="outline-2">
+<h2 id="org74d43f3">My Blog Articles</h2>
+<div class="outline-text-2" id="text-org74d43f3">
 <div class="blog-entries">
 <ul class="org-ul">
 <li><span class="timestamp">[2023-05-18]</span> <a href="blog/org-publish.html">Building a Blog with Emacs Org-Mode</a></li>
