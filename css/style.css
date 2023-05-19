@@ -5,7 +5,6 @@ body {
   background: #fff;
   color: #666;
   margin: 0;
-  border-top: 3px solid #d95c3a;
 }
 @media (max-width: 799px) {
   body {
@@ -59,10 +58,10 @@ body p {
 }
 body a {
   text-decoration: none;
-  color: #d95c3a;
+  color: #146957;
 }
 body a:hover {
-  color: #91351c;
+  color: #02033B;
   text-decoration: underline;
 }
 body pre {
@@ -151,7 +150,7 @@ body #postamble {
   border-top: 1px solid #e2e2e2;
 }
 body #postamble a {
-  color: #e9a390;
+  color: #146957;
 }
 @media (min-width: 800px) {
   body #preamble {

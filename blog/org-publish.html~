@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2023-05-18 Do 22:38 -->
+<!-- 2023-05-19 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Building a Blog with Emacs Org-Mode</title>
@@ -28,22 +28,22 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orge9b868e">Building a Blog with Emacs Org-Mode</a>
+<li><a href="#org780e703">Building a Blog with Emacs Org-Mode</a>
 <ul>
-<li><a href="#orge732856">Goal of this Article</a></li>
-<li><a href="#org86ad5a7">Lets Go</a>
+<li><a href="#org9d137d7">Goal of this Article</a></li>
+<li><a href="#org8c8b000">Lets Go</a>
 <ul>
-<li><a href="#org3a6c490">Directory Structure</a></li>
-<li><a href="#org6c3c816">Building the build-site.el</a></li>
-<li><a href="#org843e67e">Writing Blog Articles</a></li>
+<li><a href="#org9f940aa">Directory Structure</a></li>
+<li><a href="#orga98e744">Building the build-site.el</a></li>
+<li><a href="#orgd86b673">Writing Blog Articles</a></li>
 </ul>
 </li>
 <li><a href="#todos">Next Steps and Future Ideas</a>
 <ul>
-<li><a href="#org2715174"><span class="todo TODO">TODO</span> Add a Side Table of Contents</a></li>
-<li><a href="#orgaf38746"><span class="todo TODO">TODO</span> Implement a Search Bar</a></li>
-<li><a href="#orgbb6581d"><span class="todo TODO">TODO</span> Enable Draft Tagging for Articles</a></li>
-<li><a href="#orgd3f71ce"><span class="todo TODO">TODO</span> Further Exploration of CSS Design</a></li>
+<li><a href="#org4119634"><span class="todo TODO">TODO</span> Add a Side Table of Contents</a></li>
+<li><a href="#orge659704"><span class="todo TODO">TODO</span> Implement a Search Bar</a></li>
+<li><a href="#org8834312"><span class="todo TODO">TODO</span> Enable Draft Tagging for Articles</a></li>
+<li><a href="#org5d0c947"><span class="todo TODO">TODO</span> Further Exploration of CSS Design</a></li>
 </ul>
 </li>
 <li><a href="#Blogs that helped me">Blogs That Helped Me</a></li>
@@ -54,9 +54,9 @@
 </div>
 
 
-<div id="outline-container-orge9b868e" class="outline-2">
-<h2 id="orge9b868e">Building a Blog with Emacs Org-Mode</h2>
-<div class="outline-text-2" id="text-orge9b868e">
+<div id="outline-container-org780e703" class="outline-2">
+<h2 id="org780e703">Building a Blog with Emacs Org-Mode</h2>
+<div class="outline-text-2" id="text-org780e703">
 <p>
 Org-Mode is an exemplary tool for authoring content. My objective is to incorporate a blog within Emacs, allowing me to
 broadcast interesting subjects.
@@ -68,22 +68,22 @@ frequently find myself immersed in Emacs.
 </p>
 </div>
 
-<div id="outline-container-orge732856" class="outline-3">
-<h3 id="orge732856">Goal of this Article</h3>
-<div class="outline-text-3" id="text-orge732856">
+<div id="outline-container-org9d137d7" class="outline-3">
+<h3 id="org9d137d7">Goal of this Article</h3>
+<div class="outline-text-3" id="text-org9d137d7">
 <ol class="org-ol">
 <li>Guide the creation of a rudimentary blog with Org Publish</li>
 </ol>
 </div>
 </div>
 
-<div id="outline-container-org86ad5a7" class="outline-3">
-<h3 id="org86ad5a7">Lets Go</h3>
-<div class="outline-text-3" id="text-org86ad5a7">
+<div id="outline-container-org8c8b000" class="outline-3">
+<h3 id="org8c8b000">Lets Go</h3>
+<div class="outline-text-3" id="text-org8c8b000">
 </div>
-<div id="outline-container-org3a6c490" class="outline-4">
-<h4 id="org3a6c490">Directory Structure</h4>
-<div class="outline-text-4" id="text-org3a6c490">
+<div id="outline-container-org9f940aa" class="outline-4">
+<h4 id="org9f940aa">Directory Structure</h4>
+<div class="outline-text-4" id="text-org9f940aa">
 <p>
 The directory structure is recommended as follows:
 </p>
@@ -123,9 +123,9 @@ undertake can be found here: <a href="#todos">Next Steps and Future Ideas</a>
 </div>
 </div>
 
-<div id="outline-container-org6c3c816" class="outline-4">
-<h4 id="org6c3c816">Building the build-site.el</h4>
-<div class="outline-text-4" id="text-org6c3c816">
+<div id="outline-container-orga98e744" class="outline-4">
+<h4 id="orga98e744">Building the build-site.el</h4>
+<div class="outline-text-4" id="text-orga98e744">
 <p>
 I'm going to walk you through the build-site.el piece by piece. This way, you'll understand all the parts. At the end,
 I'll share the full code in the right order.
@@ -133,8 +133,8 @@ I'll share the full code in the right order.
 </div>
 
 <ul class="org-ul">
-<li><a id="orgff31db1"></a>Setting up the Publishing Project<br />
-<div class="outline-text-5" id="text-orgff31db1">
+<li><a id="org78acdc0"></a>Setting up the Publishing Project<br />
+<div class="outline-text-5" id="text-org78acdc0">
 <p>
 First up, we need to decide how our project will look.
 </p>
@@ -180,8 +180,8 @@ First up, we need to decide how our project will look.
 </div>
 
 <ul class="org-ul">
-<li><a id="org1f5b35d"></a>The <code>org-publish-project-alist</code> Variable<br />
-<div class="outline-text-6" id="text-org1f5b35d">
+<li><a id="orgb2ea54f"></a>The <code>org-publish-project-alist</code> Variable<br />
+<div class="outline-text-6" id="text-orgb2ea54f">
 <p>
 The <code>org-publish-project-alist</code> is an important variable in Emacs org-mode that helps in defining the configuration for
 exporting org files to other formats. The value of this variable is a list of publishing projects, each represented by
@@ -196,8 +196,8 @@ project.
 </div>
 </li>
 
-<li><a id="org1907656"></a>The meaning of the components<br />
-<div class="outline-text-6" id="text-org1907656">
+<li><a id="orga1b51a4"></a>The meaning of the components<br />
+<div class="outline-text-6" id="text-orga1b51a4">
 <p>
 Let's go through the components defined in the code:
 </p>
@@ -214,8 +214,8 @@ Let's go through the components defined in the code:
 </ul>
 </li>
 
-<li><a id="orgc0541bd"></a>Setting Up Necessary Packages<br />
-<div class="outline-text-5" id="text-orgc0541bd">
+<li><a id="org9db814d"></a>Setting Up Necessary Packages<br />
+<div class="outline-text-5" id="text-org9db814d">
 <p>
 To run the <code>build-set.el</code> script in our shell with the command <code>emacs -Q --script build-site.el</code>, we need to list the
 packages required to build our static webpage. Here's how we do it:
@@ -252,8 +252,8 @@ packages required to build our static webpage. Here's how we do it:
 </div>
 </li>
 
-<li><a id="org4b061bd"></a>The Complete Code Snippet<br />
-<div class="outline-text-5" id="text-org4b061bd">
+<li><a id="org98becaa"></a>The Complete Code Snippet<br />
+<div class="outline-text-5" id="text-org98becaa">
 <p>
 Here's the complete code, with all the pieces we've discussed so far. This is everything you need to set up the package
 installation directory, initialize the package system, install dependencies, define the publishing project, and generate
@@ -325,9 +325,9 @@ the site output. When everything's done, you'll get a message saying "Build comp
 </ul>
 </div>
 
-<div id="outline-container-org843e67e" class="outline-4">
-<h4 id="org843e67e">Writing Blog Articles</h4>
-<div class="outline-text-4" id="text-org843e67e">
+<div id="outline-container-orgd86b673" class="outline-4">
+<h4 id="orgd86b673">Writing Blog Articles</h4>
+<div class="outline-text-4" id="text-orgd86b673">
 <p>
 Now, it's time for you to start writing! Create your org files in the correct content folders. When you're ready, run
 the <code>build-site.el</code> script. This will turn your files into static HTML content that you can put up anywhere you want.
@@ -351,36 +351,36 @@ Here are some improvements I'm planning to make, or topics I'd like to write abo
 </p>
 </div>
 
-<div id="outline-container-org2715174" class="outline-4">
-<h4 id="org2715174"><span class="todo TODO">TODO</span> Add a Side Table of Contents</h4>
-<div class="outline-text-4" id="text-org2715174">
+<div id="outline-container-org4119634" class="outline-4">
+<h4 id="org4119634"><span class="todo TODO">TODO</span> Add a Side Table of Contents</h4>
+<div class="outline-text-4" id="text-org4119634">
 <p>
 For better navigation, especially in lengthy articles, I'd love to incorporate a table of contents on the left side of the screen. This should help readers find their way around more easily.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgaf38746" class="outline-4">
-<h4 id="orgaf38746"><span class="todo TODO">TODO</span> Implement a Search Bar</h4>
-<div class="outline-text-4" id="text-orgaf38746">
+<div id="outline-container-orge659704" class="outline-4">
+<h4 id="orge659704"><span class="todo TODO">TODO</span> Implement a Search Bar</h4>
+<div class="outline-text-4" id="text-orge659704">
 <p>
 In order to help visitors find specific information, adding a search bar to the website would be beneficial. This feature would allow users to search for particular words across the entire site.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgbb6581d" class="outline-4">
-<h4 id="orgbb6581d"><span class="todo TODO">TODO</span> Enable Draft Tagging for Articles</h4>
-<div class="outline-text-4" id="text-orgbb6581d">
+<div id="outline-container-org8834312" class="outline-4">
+<h4 id="org8834312"><span class="todo TODO">TODO</span> Enable Draft Tagging for Articles</h4>
+<div class="outline-text-4" id="text-org8834312">
 <p>
 For those articles that are still works in progress, it would be good to exclude them from being published by using a draft tag. This way, unfinished articles won't be displayed prematurely.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgd3f71ce" class="outline-4">
-<h4 id="orgd3f71ce"><span class="todo TODO">TODO</span> Further Exploration of CSS Design</h4>
-<div class="outline-text-4" id="text-orgd3f71ce">
+<div id="outline-container-org5d0c947" class="outline-4">
+<h4 id="org5d0c947"><span class="todo TODO">TODO</span> Further Exploration of CSS Design</h4>
+<div class="outline-text-4" id="text-org5d0c947">
 <p>
 I'd like to delve deeper into the subject of CSS design. In the meantime, you can refer to the informative blogs that guided me for insights into styling. Check out the section <a href="#Blogs that helped me">Blogs That Helped Me</a> for more information.
 </p>
@@ -408,7 +408,7 @@ isn't clear in my article. They were my go-to guides.
 </div>
 <div id="postamble" class="status">
 <div class='footer'>
-Last updated 2023-05-18 Do 21:58. <br>
+Last updated 2023-05-19. <br>
 Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 28.2 (<a href="https://orgmode.org">Org</a> mode 9.5.5) on <a href="https://www.gnu.org">GNU</a>/<a href="https://www.kernel.org/">Linux</a>
 </div>
 </div>
