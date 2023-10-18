@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2024-01-22 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Restoring Grub: When All Else Fails, Reinstall</title>
+<meta name="author" content="meyya" />
+<meta name="generator" content="Org Mode" />
+<link href='http://fonts.googleapis.com/css?family=Libre+Baskerville:400,400italic' rel='stylesheet' type='text/css'>
+<link rel='stylesheet' href='../css/style.css' type='text/css'/>
+</head>
+<body>
+<div id="preamble" class="status">
+<div class='nav'>
+<ul>
+<li><a href='/'>Home</a></li>
+<li><a href='/blog/index.html'>Blog</a></li>
+<li><a href='http://github.com/mikaayil'>GitHub</a></li>
+<li><a href='/contact.html'>Contact</a></li>
+</ul>
+</div>
+</div>
+<div id="content" class="content">
+<h1 class="title">Restoring Grub: When All Else Fails, Reinstall</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org69dbd58">Restoring Grub: When All Else Fails, Reinstall</a>
+<ul>
+<li><a href="#orgb4f4c80">Step 1: Identify your System Type and Partition Scheme</a>
+<ul>
+<li><a href="#orgf755063">Are you Using UEFI or BIOS?</a></li>
+<li><a href="#orgf31b5a0">Are you Using GPT or MBR?</a></li>
+</ul>
+</li>
+<li><a href="#org1b85532">Step 2: Scenario: Your System Uses UEFI and Grub</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org69dbd58" class="outline-2">
+<h2 id="org69dbd58">Restoring Grub: When All Else Fails, Reinstall</h2>
+<div class="outline-text-2" id="text-org69dbd58">
+<p>
+When you've tried every trick in the book to fix Grub but to no avail, you might be left feeling at a dead end. However, there is still one option you can resort to: reinstalling Grub. Follow the steps outlined below to execute this process successfully.
+</p>
+</div>
+
+<div id="outline-container-orgb4f4c80" class="outline-3">
+<h3 id="orgb4f4c80">Step 1: Identify your System Type and Partition Scheme</h3>
+<div class="outline-text-3" id="text-orgb4f4c80">
+</div>
+<div id="outline-container-orgf755063" class="outline-4">
+<h4 id="orgf755063">Are you Using UEFI or BIOS?</h4>
+<div class="outline-text-4" id="text-orgf755063">
+<p>
+To determine if your system employs UEFI or BIOS, execute the following command in a live environment:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh">ls /sys/firmware/efi/efivars
+</pre>
+</div>
+
+<p>
+If this command returns a list of files, your system is using UEFI. If it returns an error or the directory does not exist, your system likely operates on BIOS.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgf31b5a0" class="outline-4">
+<h4 id="orgf31b5a0">Are you Using GPT or MBR?</h4>
+<div class="outline-text-4" id="text-orgf31b5a0">
+<p>
+To identify the partition scheme utilized on the /dev/sda disk, for example, run this command:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh">sudo fdisk -l /dev/sda
+</pre>
+</div>
+
+<p>
+Look for a line in the command's output that contains "Disklabel type". The value following this text indicates the partition scheme in use. If it is "gpt", your disk is using the GPT partition scheme. If it is "dos", your disk is using the MBR partition scheme (also known as the DOS partition scheme).
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org1b85532" class="outline-3">
+<h3 id="org1b85532">Step 2: Scenario: Your System Uses UEFI and Grub</h3>
+<div class="outline-text-3" id="text-org1b85532">
+<p>
+In this case, you need to run the following command:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh">grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB
+</pre>
+</div>
+
+<blockquote>
+<p>
+Note: &#x2013;efi-directory refers to the EFI partition mounted under /boot/efi. If your EFI partition is also your boot partition, you need to execute &#x2013;efi-directory=/boot instead.
+</p>
+</blockquote>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<div class='footer'>
+Last updated 2023-07-19. <br>
+Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.1 (<a href="https://orgmode.org">Org</a> mode 9.6.6) on <a href="https://www.gnu.org">GNU</a>/<a href="https://www.kernel.org/">Linux</a>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2023-07-19 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Enabling Grub Hibernation</title>
+<meta name="generator" content="Org Mode" />
+<link href='http://fonts.googleapis.com/css?family=Libre+Baskerville:400,400italic' rel='stylesheet' type='text/css'>
+<link rel='stylesheet' href='../css/style.css' type='text/css'/>
+</head>
+<body>
+<div id="preamble" class="status">
+<div class='nav'>
+<ul>
+<li><a href='/'>Home</a></li>
+<li><a href='/blog/index.html'>Blog</a></li>
+<li><a href='http://github.com/mikaayil'>GitHub</a></li>
+<li><a href='/contact.html'>Contact</a></li>
+</ul>
+</div>
+</div>
+<div id="content" class="content">
+<h1 class="title">Enabling Grub Hibernation</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org8ad33f9">Enabling Grub Hibernation</a>
+<ul>
+<li><a href="#org61e9057">Creating a Swap File</a></li>
+<li><a href="#org3ad28b5">Enabling Hibernation into the Swap File</a>
+<ul>
+<li><a href="#orgdc99702">Adjusting mkinitcpio</a></li>
+<li><a href="#orgc780545">Adjusting Grub Kernel Parameters</a></li>
+</ul>
+</li>
+<li><a href="#org44f8860">Conclusion</a></li>
+<li><a href="#org3a272ce">Useful Sources</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org8ad33f9" class="outline-2">
+<h2 id="org8ad33f9">Enabling Grub Hibernation</h2>
+<div class="outline-text-2" id="text-org8ad33f9">
+</div>
+<div id="outline-container-org61e9057" class="outline-3">
+<h3 id="org61e9057">Creating a Swap File</h3>
+<div class="outline-text-3" id="text-org61e9057">
+<p>
+The first step towards enabling hibernation with Grub is creating a swap file. Here are the steps as outlined in the Arch Linux Guide.
+</p>
+
+<p>
+To create a swap file of your choice size, you can use the `dd` command. The following example creates an 8 GiB swap file:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh">dd <span style="font-weight: bold; font-style: italic;">if</span>=/dev/zero <span style="font-weight: bold; font-style: italic;">of</span>=/swapfile <span style="font-weight: bold; font-style: italic;">bs</span>=1M <span style="font-weight: bold; font-style: italic;">count</span>=8k <span style="font-weight: bold; font-style: italic;">status</span>=progress
+</pre>
+</div>
+
+<p>
+Once you've created the swap file, you need to set the right permissions. A world-readable swap file can present a significant local vulnerability:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh">chmod 0600 /swapfile
+</pre>
+</div>
+
+<p>
+After creating the appropriately-sized file, you need to format it to swap:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh">mkswap -U clear /swapfile
+</pre>
+</div>
+
+<p>
+Next, you'll activate the swap file:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh">swapon /swapfile
+</pre>
+</div>
+
+<p>
+Finally, add an entry for the swap file in the `fstab` configuration:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh"><span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">/etc/fstab</span>
+/swapfile none swap defaults 0 0
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org3ad28b5" class="outline-3">
+<h3 id="org3ad28b5">Enabling Hibernation into the Swap File</h3>
+<div class="outline-text-3" id="text-org3ad28b5">
+</div>
+<div id="outline-container-orgdc99702" class="outline-4">
+<h4 id="orgdc99702">Adjusting mkinitcpio</h4>
+<div class="outline-text-4" id="text-orgdc99702">
+<p>
+If your swap file is located on an encrypted device, you need to add the 'resume' hook after the 'encrypt' hook in the `mkinitcpio.conf`, so that the swap file can be decrypted:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh"><span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">/etc/mkinitcpio.conf</span>
+...
+<span style="font-weight: bold; font-style: italic;">HOOKS</span>=(... encrypt resume...)
+...
+</pre>
+</div>
+
+<p>
+Next, run the following command:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh">sudo mkinitcpio -P
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc780545" class="outline-4">
+<h4 id="orgc780545">Adjusting Grub Kernel Parameters</h4>
+<div class="outline-text-4" id="text-orgc780545">
+<p>
+The Arch Linux documentation are helpful here:
+</p>
+
+<p>
+If you are using a swap file, you need to set the `resume=UUID=swap<sub>device</sub><sub>uuid</sub>` kernel parameters, and also add a `resume<sub>offset</sub>=swap<sub>file</sub><sub>offset</sub>`.
+</p>
+</div>
+
+<ul class="org-ul">
+<li><a id="org096be47"></a>Finding the resume<sub>offset</sub><br />
+<div class="outline-text-5" id="text-org096be47">
+<p>
+On file systems other than Btrfs, you can obtain the value of `swap<sub>file</sub><sub>offset</sub>` by running `filefrag -v swap<sub>file</sub>`. The required value can be found in the first row of the `physical<sub>offset</sub>` column in the output table.
+</p>
+
+<p>
+For example:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh">$ filefrag -v /swapfile
+---
+
+Filesystem type is: ef53
+File size of /swapfile is 4294967296 (1048576 blocks of 4096 bytes)
+ ext:     logical_offset:        physical_offset: length:   expected: flags:
+   0:        0..       0:      38912..     38912:      1:            
+   1:        1..   22527:      38913..     61439:  22527:             unwritten
+   2:    22528..   53247:     899072..    929791:  30720:      61440: unwritten
+...
+<span style="font-weight: bold;">```</span>
+</pre>
+</div>
+
+<p>
+In the example, the value of `swap<sub>file</sub><sub>offset</sub>` is the first `38912` (with the two periods), and the kernel parameter would be `resume<sub>offset</sub>=38912`.
+</p>
+</div>
+</li>
+
+<li><a id="org230545c"></a>Finding the UUID of the Swapfile<br />
+<div class="outline-text-5" id="text-org230545c">
+<p>
+You can use the following command to identify `swap<sub>device</sub><sub>uuid</sub>`:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh">findmnt -no UUID -T /swapfile
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="org2875e2a"></a>Modifying /etc/default/grub<br />
+<div class="outline-text-5" id="text-org2875e2a">
+<p>
+You need to write these values into the `/etc/default/grub` file.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh"><span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">/etc/default/grub</span>
+<span style="font-weight: bold; font-style: italic;">GRUB_CMDLINE_LINUX</span>=<span style="font-style: italic;">"resume=UUID=&lt;UUID goes here&gt; resume_offset=&lt;resume_offset goes here&gt;"</span>
+</pre>
+</div>
+
+<p>
+Finally, you can regenerate the grub configuration:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh">sudo grub-mkconfig -o /boot/grub/grub.cfg
+</pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org44f8860" class="outline-3">
+<h3 id="org44f8860">Conclusion</h3>
+<div class="outline-text-3" id="text-org44f8860">
+<p>
+We have now created a swap file, modified the `mkinitcpio.conf`, and adjusted the Grub kernel parameters.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org3a272ce" class="outline-3">
+<h3 id="org3a272ce">Useful Sources</h3>
+<div class="outline-text-3" id="text-org3a272ce">
+<ul class="org-ul">
+<li><a href="https://wiki.archlinux.org/title/dm-crypt/Swap_encryption#With_suspend-to-disk_support">dm-crypt/Swap encryption</a></li>
+<li><a href="https://wiki.archlinux.org/title/Swap#Swap_file">Swap File</a></li>
+<li><a href="https://wiki.archlinux.org/title/Power_management/Suspend_and_hibernate#Hibernation_into_swap_file">Hibernation into swap file</a></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<div class='footer'>
+Last updated 2023-07-19. <br>
+Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 28.2 (<a href="https://orgmode.org">Org</a> mode 9.5.5) on <a href="https://www.gnu.org">GNU</a>/<a href="https://www.kernel.org/">Linux</a>
+</div>
+</div>
+</body>
+</html>
